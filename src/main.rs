@@ -10,6 +10,7 @@ fn main() {
 
     println!("the generated points are  : {:?} , {:?}, {:?}", p_1, p_2, p_3);
 
+
     let mut clusterer = Clusterer::from_data(vec![Rc::clone(&p_1), Rc::clone(&p_2)]);
 
     println!("the distance between the points is : {}", Point::distance(p_1, p_3));

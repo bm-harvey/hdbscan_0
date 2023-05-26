@@ -68,12 +68,40 @@ impl Point {
     }
 }
 
-impl Default for Point{
+impl Default for Point {
     fn default() -> Self {
         Self::new()
     }
 }
+//
+// Ball tree
+//
+#[derive(Debug)]
+#[derive(Default)]
+pub struct BallTree {
+    child_left: Option<Box<BallTree>>,
+    child_right: Option<Box<BallTree>>,
+}
 
+impl BallTree {
+    pub fn new() -> Self{
+        Self{
+            child_left:None,
+            child_right:None,
+        }
+    }
+
+    pub fn construct(data: Vec<Rc<RefCell<Point>>>, leaf_size : usize) -> Self{
+
+        
+
+       Self { child_left: None, child_right: None } 
+    }
+}
+
+//
+// Clusterer
+//
 #[derive(Debug)]
 pub struct Clusterer {
     data: Vec<Rc<RefCell<Point>>>,
@@ -99,8 +127,8 @@ impl Clusterer {
     }
 }
 
-impl Default for Clusterer{
-    fn default() -> Self{
+impl Default for Clusterer {
+    fn default() -> Self {
         Self::new()
-    } 
+    }
 }
