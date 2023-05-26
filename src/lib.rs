@@ -1,9 +1,8 @@
-use std::borrow::{Borrow};
-use std::rc::Rc;
+use std::borrow::Borrow;
 use std::cell::RefCell;
+use std::rc::Rc;
 
-#[derive(Debug)]
-#[derive(Clone)]
+#[derive(Debug, Clone)]
 pub struct Point {
     coordinate: Vec<f64>,
     nearest_neighbors: Vec<Rc<RefCell<Point>>>,
@@ -22,14 +21,13 @@ impl Point {
         Rc::new(RefCell::new(Point::from(coord)))
     }
 
-
     pub fn new() -> Self {
         Self {
             coordinate: vec![],
             nearest_neighbors: vec![],
         }
     }
-    
+
     pub fn new_as_rcc() -> Rc<RefCell<Self>> {
         Rc::new(RefCell::new(Point::new()))
     }
@@ -43,10 +41,10 @@ impl Point {
         return self.coordinate.get(index);
     }
 
-pub fn distance(point_1 : Rc<RefCell<Point>> , point_2 :  Rc<RefCell<Point>>) -> f64 {
+    pub fn distance(point_1: Rc<RefCell<Point>>, point_2: Rc<RefCell<Point>>) -> f64 {
         // if this passes, the rest of the calculation must be safe.
         let point_1 = RefCell::borrow(&point_1);
-        let point_2 = RefCell::borrow(&point_2); 
+        let point_2 = RefCell::borrow(&point_2);
 
         assert_eq!(point_1.num_dimensions(), point_2.num_dimensions());
 
@@ -60,13 +58,19 @@ pub fn distance(point_1 : Rc<RefCell<Point>> , point_2 :  Rc<RefCell<Point>>) ->
 
     // mut
     pub fn add_neighbor(&mut self, other: Rc<RefCell<Point>>) {
-        self.nearest_neighbors.push(Rc::clone(&other.borrow()));
+        self.nearest_neighbors.push(Rc::clone(other.borrow()));
     }
 
     pub fn scale_data(&mut self, scale: f64, offset: f64) {
         for coord in &mut self.coordinate {
             *coord = (*coord) * scale + offset;
         }
+    }
+}
+
+impl Default for Point{
+    fn default() -> Self {
+        Self::new()
     }
 }
 
@@ -78,29 +82,25 @@ pub struct Clusterer {
 impl Clusterer {
     // ctor-like
     pub fn new() -> Self {
-        Self { data: vec![]}
+        Self { data: vec![] }
     }
-    
-    pub fn from_data(d : Vec<Rc<RefCell<Point>>>) -> Self {
+
+    pub fn from_data(d: Vec<Rc<RefCell<Point>>>) -> Self {
         Self { data: d }
     }
 
     // mut
     pub fn scale_data(&mut self, scale: f64, offset: f64) {
         for point in &mut self.data {
-
             let mut mut_point = RefCell::borrow_mut(point);
             mut_point.scale_data(scale, offset);
-            // i need to use the Rc<RefCell<Point>> pattern    
+            // i need to use the Rc<RefCell<Point>> pattern
         }
     }
 }
 
-
-#[derive(Debug)]
-pub struct BallTree{
-//    leaf_size: u32,
-}
-
-impl BallTree {
+impl Default for Clusterer{
+    fn default() -> Self{
+        Self::new()
+    } 
 }
