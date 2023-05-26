@@ -99,7 +99,7 @@ impl Clusterer {
 
 #[derive(Debug)]
 pub struct BallTree{
-    leaf_size: u32,
+//    leaf_size: u32,
 }
 
 impl BallTree {
