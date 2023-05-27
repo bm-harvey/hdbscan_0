@@ -13,7 +13,7 @@ fn main() {
 
     let mut clusterer = Clusterer::from_data(vec![Rc::clone(&p_1), Rc::clone(&p_2)]);
 
-    println!("the distance between the points is : {}", Point::distance(p_1, p_3));
+    println!("the distance between the points is : {}", Point::distance(&p_1, &p_3));
 
     println!("The clusterer pre-scaling is {:#?}", clusterer);
     
