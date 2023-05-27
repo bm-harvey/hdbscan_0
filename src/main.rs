@@ -1,18 +1,20 @@
-use hdbscan_0::{self, Point, Clusterer};
-use std::{rc::Rc, cell::RefCell};
-use rand::{Rng, distributions::Uniform, distributions::Distribution};
+use std::{cell::RefCell, rc::Rc};
+
+use rand::{distributions::Distribution, distributions::Uniform};
+
+use hdbscan_0::{
+    ball_tree::{BallTreeBranchData},
+    point::Point,
+};
+// use hdbscan_0::cluster::Clusterer;
 
 fn main() {
-
-    let mut data : Vec<Rc<RefCell<Point>>> = vec![];
-
-
+    let mut data: Vec<Rc<RefCell<Point>>> = vec![];
 
     let mut rng = rand::thread_rng();
     let distribution = Uniform::from(-1f64..1f64);
 
-
-    for _ in 0..10000000{
+    for _ in 0..1000 {
         data.push(Point::from_as_rcc(vec![
             distribution.sample(&mut rng),
             distribution.sample(&mut rng),
@@ -20,14 +22,6 @@ fn main() {
         ]))
     }
 
-//    println!("data is {:#?}", data);
-
-    let ball_tree = hdbscan_0::BallTreeBranchData::construct(data, 30);
+    let ball_tree = BallTreeBranchData::construct(data, 30);
     println!("{:#?}", ball_tree);
-
-        //BallTreeBranch::construct(data, 30);
-    
-
-
-
 }
