@@ -3,7 +3,7 @@ use std::{cell::RefCell, rc::Rc};
 use rand::{distributions::Distribution, distributions::Uniform};
 
 use hdbscan_0::{
-    ball_tree::{BallTreeBranchData},
+    ball_tree,
     point::Point,
 };
 // use hdbscan_0::cluster::Clusterer;
@@ -22,6 +22,6 @@ fn main() {
         ]))
     }
 
-    let ball_tree = BallTreeBranchData::construct(data, 30);
+    let ball_tree = ball_tree::construct(data, 30);
     println!("{:#?}", ball_tree);
 }
