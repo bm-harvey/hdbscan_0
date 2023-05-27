@@ -79,7 +79,7 @@ impl Default for Point {
 
 */
 
-struct Clusterer {
+pub struct Clusterer {
     data: Vec<Rc<RefCell<Point>>>,
 }
 
@@ -109,13 +109,14 @@ impl Default for Clusterer {
     }
 }
 
-struct BallTreeBranchData {
+#[derive(Debug)]
+pub struct BallTreeBranchData {
     child_left: Box<BallTree>,
     child_right: Box<BallTree>,
 }
 
 impl BallTreeBranchData {
-    fn construct(data: Vec<Rc<RefCell<Point>>>, leaf_size: usize) -> Box<BallTree> {
+     pub fn construct(data: Vec<Rc<RefCell<Point>>>, leaf_size: usize) -> Box<BallTree> {
         // grab any point, find the point furthest from that point, find the point furthest from the second point
         // the second and third point are generally far from each other.
         // todo - There might be better ways to do this in the future
@@ -171,15 +172,17 @@ impl BallTreeBranchData {
             child_left,
             child_right,
         }));
-
-        //s        return BallTree(BallTreeLeafData{data});
     }
 }
-struct BallTreeLeafData {
+
+
+#[derive(Debug)]
+pub struct BallTreeLeafData {
     data: Vec<Rc<RefCell<Point>>>,
 }
 
-enum BallTree {
+#[derive(Debug)]
+pub enum BallTree {
     BallTreeBranch(BallTreeBranchData),
     BallTreeLeaf(BallTreeLeafData),
 }
