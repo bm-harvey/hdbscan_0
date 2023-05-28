@@ -17,15 +17,26 @@ fn main() {
         ]))
     }
 
-    let bt = ball_tree::construct(data, 30);
+    let bt = ball_tree::construct(data, 2);
 
 
-    /*
     // this is the behaviour i am trying to implement
     let mut counter = 0;
-    for pnt in &mut bt{
+    for pnt in bt.iter() {
         counter += 1;
+        if counter > 10{
+            println!("something went wrong");
+            break;
+        }
         println!("{} : the point is : {:?}",counter, &pnt);
     }
-    */
+    let mut counter = 0;
+    for pnt in bt.iter() {
+        counter += 1;
+        if counter > 10{
+            println!("something went wrong");
+            break;
+        }
+        println!("{} : the point is : {:?}",counter, &pnt);
+    }
 }

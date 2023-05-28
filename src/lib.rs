@@ -12,5 +12,5 @@ use cluster::Clusterer;
 
 pub mod ball_tree;
 use ball_tree::BallTree;
-use ball_tree::BallTreeBranchData;
-use ball_tree::BallTreeLeafData;
+use ball_tree::BranchData;
+use ball_tree::LeafData;
