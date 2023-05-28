@@ -18,7 +18,7 @@ pub struct LeafData {
 
 pub struct BranchItrData<'a> {
     data: &'a BranchData,
-    child_is_left : bool,
+    child_is_left: bool,
     child_itr: Box<BallTreeItr<'a>>,
 }
 pub struct LeafItrData<'a> {
@@ -37,11 +37,19 @@ pub enum BallTreeItr<'a> {
 }
 
 impl<'a> BallTree {
+    pub fn count_elements(&self) -> usize {
+        let mut counter = 0;
+        for _ in self.iter() {
+            counter += 1;
+        }
+        counter
+    }
+
     pub fn iter(&'a self) -> BallTreeItr<'a> {
         match self {
             BallTree::Branch(tree) => BallTreeItr::Branch(BranchItrData {
                 data: tree,
-                child_is_left : true,
+                child_is_left: true,
                 child_itr: Box::new(tree.child_left.iter()),
             }),
             BallTree::Leaf(tree) => BallTreeItr::Leaf(LeafItrData {
@@ -61,16 +69,15 @@ impl<'a> Iterator for BallTreeItr<'a> {
                 let result = itr.child_itr.next();
                 match result {
                     None => {
-                        if itr.child_is_left{
+                        if itr.child_is_left {
                             itr.child_is_left = false;
                             itr.child_itr = Box::new(itr.data.child_right.iter());
                             itr.child_itr.next()
                         } else {
-                         None
+                            None
                         }
-                    },
-                    Some(res) => Some(res)
-                    
+                    }
+                    Some(res) => Some(res),
                 }
             }
             BallTreeItr::Leaf(itr) => {
@@ -106,7 +113,7 @@ pub fn construct(data: Vec<Rc<RefCell<Point>>>, leaf_size: usize) -> Box<BallTre
     let mut far_pnt_1 = Rc::clone(data[1].borrow());
     let mut max_distance = Point::distance(&far_pnt_1, &random_pnt);
 
-    for pnt in data.iter().skip(2){
+    for pnt in data.iter().skip(2) {
         let dist = Point::distance(pnt, &random_pnt);
         if max_distance < dist {
             max_distance = dist;
@@ -123,15 +130,14 @@ pub fn construct(data: Vec<Rc<RefCell<Point>>>, leaf_size: usize) -> Box<BallTre
             far_pnt_2 = Rc::clone(pnt);
         }
     }
-
     let mut vec_left: Vec<Rc<RefCell<Point>>> = vec![];
     let mut vec_right: Vec<Rc<RefCell<Point>>> = vec![];
 
-    for point_ref in &data {
-        if Point::distance(&far_pnt_1, point_ref) < Point::distance(&far_pnt_2, point_ref) {
-            vec_left.push(Rc::clone(point_ref));
+    for pnt in &data {
+        if Point::distance(pnt, &far_pnt_1) < Point::distance(pnt, &far_pnt_2) {
+            vec_left.push(Rc::clone(pnt));
         } else {
-            vec_right.push(Rc::clone(point_ref));
+            vec_right.push(Rc::clone(pnt));
         }
     }
 
