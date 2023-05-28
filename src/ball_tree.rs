@@ -96,7 +96,7 @@ pub fn construct(data: Vec<Rc<RefCell<Point>>>, leaf_size: usize) -> Box<BallTre
     // todo - There might be better ways to do this in the future
     // todo - in general this code is gross but it do the thing. clean it up sometime
 
-    if data.len() < leaf_size || data.len() < 2 {
+    if data.len() < leaf_size || data.len() < 3 {
         return Box::new(BallTree::Leaf(LeafData { point_cloud: data }));
     }
 
@@ -105,26 +105,22 @@ pub fn construct(data: Vec<Rc<RefCell<Point>>>, leaf_size: usize) -> Box<BallTre
     // todo - is there a more idiomatic way to do loops like this with closures?
     let mut far_pnt_1 = Rc::clone(data[1].borrow());
     let mut max_distance = Point::distance(&far_pnt_1, &random_pnt);
-    for index in 1..(data.len()) {
-        let pnt = Rc::clone(data[index].borrow());
+
+    for pnt in data.iter().skip(2){
         let dist = Point::distance(&pnt, &random_pnt);
         if max_distance < dist {
             max_distance = dist;
-            far_pnt_1 = pnt;
+            far_pnt_1 = Rc::clone(pnt);
         }
     }
 
     let mut far_pnt_2 = Rc::clone(data[0].borrow());
     let mut max_distance = Point::distance(&far_pnt_1, &far_pnt_2);
-    for index in 1..(data.len()) {
-        if index == 1 {
-            continue;
-        }
-        let pnt = Rc::clone(data[index].borrow());
+    for pnt in data.iter() {
         let dist = Point::distance(&pnt, &random_pnt);
         if max_distance < dist {
             max_distance = dist;
-            far_pnt_2 = pnt;
+            far_pnt_2 = Rc::clone(pnt);
         }
     }
 

@@ -45,8 +45,8 @@ impl Point {
 
     pub fn distance(point_1: &Rc<RefCell<Point>>, point_2: &Rc<RefCell<Point>>) -> f64 {
         // if this passes, the rest of the calculation must be safe.
-        let point_1 = RefCell::borrow(&point_1);
-        let point_2 = RefCell::borrow(&point_2);
+        let point_1 = RefCell::borrow(point_1);
+        let point_2 = RefCell::borrow(point_2);
 
         assert_eq!(point_1.num_dimensions(), point_2.num_dimensions());
 
