@@ -107,7 +107,7 @@ pub fn construct(data: Vec<Rc<RefCell<Point>>>, leaf_size: usize) -> Box<BallTre
     let mut max_distance = Point::distance(&far_pnt_1, &random_pnt);
 
     for pnt in data.iter().skip(2){
-        let dist = Point::distance(&pnt, &random_pnt);
+        let dist = Point::distance(pnt, &random_pnt);
         if max_distance < dist {
             max_distance = dist;
             far_pnt_1 = Rc::clone(pnt);
@@ -117,7 +117,7 @@ pub fn construct(data: Vec<Rc<RefCell<Point>>>, leaf_size: usize) -> Box<BallTre
     let mut far_pnt_2 = Rc::clone(data[0].borrow());
     let mut max_distance = Point::distance(&far_pnt_1, &far_pnt_2);
     for pnt in data.iter() {
-        let dist = Point::distance(&pnt, &random_pnt);
+        let dist = Point::distance(pnt, &random_pnt);
         if max_distance < dist {
             max_distance = dist;
             far_pnt_2 = Rc::clone(pnt);
@@ -128,7 +128,7 @@ pub fn construct(data: Vec<Rc<RefCell<Point>>>, leaf_size: usize) -> Box<BallTre
     let mut vec_right: Vec<Rc<RefCell<Point>>> = vec![];
 
     for point_ref in &data {
-        if Point::distance(&far_pnt_1, &point_ref) < Point::distance(&far_pnt_2, &point_ref) {
+        if Point::distance(&far_pnt_1, point_ref) < Point::distance(&far_pnt_2, point_ref) {
             vec_left.push(Rc::clone(point_ref));
         } else {
             vec_right.push(Rc::clone(point_ref));
@@ -138,8 +138,8 @@ pub fn construct(data: Vec<Rc<RefCell<Point>>>, leaf_size: usize) -> Box<BallTre
     let child_left = construct(vec_left, leaf_size);
     let child_right = construct(vec_right, leaf_size);
 
-    return Box::new(BallTree::Branch(BranchData {
+    Box::new(BallTree::Branch(BranchData {
         child_left,
         child_right,
-    }));
+    }))
 }
