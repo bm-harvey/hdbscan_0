@@ -10,6 +10,7 @@ pub struct Point {
 }
 
 impl Point {
+    // type PointRef = Rc<RefCell<Point>>;
     // ctor
     pub fn from(coord: Vec<f64>) -> Self {
         Self {

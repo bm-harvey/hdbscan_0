@@ -14,5 +14,3 @@ pub mod ball_tree;
 use ball_tree::BallTree;
 use ball_tree::BallTreeBranchData;
 use ball_tree::BallTreeLeafData;
-
-
