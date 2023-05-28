@@ -1,6 +1,5 @@
 use std::borrow::Borrow;
-use std::cell::{Ref, RefCell};
-// use std::collections::btree_map::Iter;
+use std::cell::RefCell;
 use std::rc::Rc;
 
 use crate::point;
@@ -10,8 +9,6 @@ use point::Point;
 pub struct BallTreeBranchData {
     child_left: Box<BallTree>,
     child_right: Box<BallTree>,
-    // child_left_done_iterating: bool,
-    // child_riht_done_iterating: bool,
 }
 
 impl BallTreeBranchData {}
@@ -19,7 +16,6 @@ impl BallTreeBranchData {}
 #[derive(Debug)]
 pub struct BallTreeLeafData {
     data: Vec<Rc<RefCell<Point>>>,
-    itr_counter: usize,
 }
 
 #[derive(Debug)]
@@ -28,81 +24,6 @@ pub enum BallTree {
     BallTreeLeaf(BallTreeLeafData),
 }
 
-struct BallTreeBranchIterator<'a> {
-    internal_data: &'a BallTreeBranchData,
-    state: usize,
-}
-
-impl<'a> Iterator for BallTreeBranchIterator<'a> {
-    type Item = &'a Rc<RefCell<Point>>;
-
-    fn next(&mut self) -> Option<Self::Item> {
-        
-        let result_left = self.internal_data.child_left.next();
-        match result_left {
-            Some(itr) => Some(itr),
-            None => self.internal_data.child_right.next(),
-        }
-    }
-}
-
-// impl Iterator for BallTree {
-//     type Item = Rc<RefCell<Point>>;
-//     fn next(&mut self) -> Option<Self::Item> {
-//         match self {
-//             BallTree::BallTreeLeaf(tree) => {
-//                 if tree.itr_counter < tree.data.len() {
-//                     let index = tree.itr_counter;
-//                     tree.itr_counter += 1;
-//                     return Some(Rc::clone(tree.data.get(index).unwrap()));
-//                 }
-//                 None
-//             }
-//             BallTree::BallTreeBranch(tree) => {
-//                 let result_left = tree.child_left.next();
-
-//                 match result_left {
-//                     Some(itr) => Some(itr),
-//                     None => tree.child_right.next(),
-//                 }
-//             }
-//         }
-//     }
-// }
-
-// impl Iterator for BallTreeBranchData {
-//     type Item = Rc<RefCell<Point>>;
-
-//     fn next(&mut self) -> Option<Self::Item> {
-//         let result_left = self.child_left.next();
-//         None
-//     }
-// }
-
-// impl Iterator for BallTreeLeafData{
-//     type Item = Rc<RefCell<Point>>;
-
-//     fn next(&mut self) -> Option<Self::Item> {
-//         if self.itr_counter < self.data.len(){
-//             self.itr_counter += 1;
-//             return Some(self.data[self.itr_counter - 1].to_owned());
-//         }
-
-//         None
-//     }
-// }
-/*
-impl IntoIterator for BallTreeLeafData{
-    type Item = Rc<RefCell<Point>>;
-
-    type IntoIter = std::vec::IntoIter<Self::Item>;
-
-    fn into_iter(self) -> Self::IntoIter {
-        self.data.into_iter()
-    }
-}
-*/
-
 pub fn construct(data: Vec<Rc<RefCell<Point>>>, leaf_size: usize) -> Box<BallTree> {
     // grab any point, find the point furthest from that point, find the point furthest from the second point
     // the second and third point are generally far from each other.
@@ -110,10 +31,7 @@ pub fn construct(data: Vec<Rc<RefCell<Point>>>, leaf_size: usize) -> Box<BallTre
     // todo - in general this code is gross but it do the thing. clean it up sometime
 
     if data.len() < leaf_size || data.len() < 2 {
-        return Box::new(BallTree::BallTreeLeaf(BallTreeLeafData {
-            data,
-            itr_counter: 0,
-        }));
+        return Box::new(BallTree::BallTreeLeaf(BallTreeLeafData { data }));
     }
 
     let random_pnt = Rc::clone(data[0].borrow());
